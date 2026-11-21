@@ -372,7 +372,7 @@ try{
   var _cached=JSON.parse(localStorage.getItem('mi_stats')||'{}');
   var _rk="$2a$10$BY1RtYMjnMaR9r3XN1ySO.mT1jd0flmCmJ1flWmLTAW2.tu07jnYC";
   var _hdr=(_rk && _rk.indexOf('YAHAN_')!==0)?{'X-Access-Key':_rk}:{};
-  window.__miPrefetch=fetch('https://api.jsonbin.io/v3/b/6afafe7dffd5d16053c58e33/latest',{headers:_hdr}).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;});
+  window.__miPrefetch=fetch('https://api.jsonbin.io/v3/b/6afafe7dffd5d16053c58e33/latest',{headers:_hdr,cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;});
 }catch(e){}
 </script>
 </head>
@@ -1095,6 +1095,7 @@ function extractYTId(url) {
 
 /* ==================== 4) RENDER STATS & SECTIONS ==================== */
 function renderStat(el, val) {
+  el.dataset.animated = 'true';
   const s = String(val || '').trim();
   if (!s) return;
   const cleanS = s.replace(/,/g, '');
@@ -1455,7 +1456,7 @@ async function loadMediaKitData() {
       const hdr = (cfg.cloudReadKey && !cfg.cloudReadKey.startsWith('YAHAN_')) ? { 'X-Access-Key': cfg.cloudReadKey } : {};
       const json = window.__miPrefetch
         ? await window.__miPrefetch
-        : await fetch(`https://api.jsonbin.io/v3/b/${cfg.cloudBinId}/latest`, { headers: hdr }).then(r => r.ok ? r.json() : null);
+        : await fetch(`https://api.jsonbin.io/v3/b/${cfg.cloudBinId}/latest`, { headers: hdr, cache: 'no-store' }).then(r => r.ok ? r.json() : null);
       if (json && json.record) {
   data = Object.assign(data, json.record);
   setLocalStats(json.record);
